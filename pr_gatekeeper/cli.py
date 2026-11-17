@@ -102,5 +102,7 @@ def main():
     else:
         parser.print_help()
 
+app = main
+
 if __name__ == "__main__":
     main()

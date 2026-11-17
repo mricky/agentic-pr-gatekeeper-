@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "AI-Powered Autonomous Pull Request Review & Quality Gatekeeper via MCP"
 authors = [{ name = "Mochamad Ricky Susanto" }]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
     "pydantic>=2.5.0",
     "rich>=13.7.0",
