@@ -88,6 +88,30 @@
 
 ---
 
+## ⚖️ Why MCP? (Raw-Diff vs. Context-Aware Review)
+
+Most AI code reviewers pass raw, truncated `git diff` text directly to an LLM. While fast, this blind approach fails for mission-critical engineering projects where context lives outside the diff lines.
+
+| Architectural Dimension | ❌ Traditional Blind Review (Raw Diff) |  Agentic MCP Gatekeeper (`agentic-pr-gatekeeper`) |
+| :--- | :--- | :--- |
+| **Input to LLM** | Truncated `git diff` patch only. | `git diff` + AST Symbols + Discovered Unit Tests + `ARCHITECTURE.md`. |
+| **Code Structure Insight** | Blind to modified classes, methods, or signatures. | **`get_ast_symbols()`**: Maps exact function ASTs, class scopes, and arguments. |
+| **Test Verification** | Blind to whether test suites exist for changed files. | **`find_related_tests()`**: Auto-scans `tests/` to verify regression test coverage. |
+| **Enterprise Governance** | Generic LLM prompt heuristics. | **`get_arch_guidelines()`**: Injects repo's real [`ARCHITECTURE.md`](file:///Users/hacaca/Projects/personal/public-repo/agentic-pr-gatekeeper/ARCHITECTURE.md) rules into review prompt. |
+| **Blast Radius Calculation** | Guessed arbitrarily by LLM (hallucination-prone). | **Deterministic Engine**: Mathematical line diff count + critical infra pattern matching. |
+
+### 🚌 Real-World Example: Shuttle Travel & Seat Booking System
+In high-concurrency systems (such as a **Shuttle Travel Booking System**), subtle bugs can cause critical operational failures:
+* **The Problem:** A developer modifies `book_seat()` in `booking.py` but forgets row-level locking (`SELECT FOR UPDATE`), creating a double-booking race condition. They also forget to add a unit test in `tests/test_booking.py`.
+* **Traditional Raw Diff Reviewer:** Sees valid Python syntax $\rightarrow$ **False Approval 🟢** (Bypasses CI and causes production double-booking incidents).
+* **Agentic MCP Gatekeeper:**
+  1. AST extraction isolates `book_seat()` at line 45.
+  2. Test discovery notes: `test_booking.py` missing accompanying regression tests.
+  3. Architecture guidelines inject rule: *"Seat allocation must use row-level locking (`SELECT FOR UPDATE`)"*.
+  4. **Verdict: 🔴 MERGE BLOCKED** with actionable architectural findings!
+
+---
+
 ## 🚀 Quick Start
 
 ### 1. Installation
@@ -123,6 +147,36 @@ pr-gatekeeper context pr_gatekeeper/blast_radius.py
 
 ```bash
 pytest tests/ -v
+```
+
+### 4. Auditing Other Repositories & Troubleshooting
+
+#### A. Error: `zsh: command not found: pr-gatekeeper`
+Ensure your virtual environment is activated:
+```bash
+# In the agentic-pr-gatekeeper folder:
+source venv/bin/activate
+pr-gatekeeper review --target main
+```
+Alternatively, call the binary directly:
+```bash
+./venv/bin/pr-gatekeeper review --target main
+```
+
+#### B. Using `pr-gatekeeper` to Audit Another Local Project (e.g. `llm-eval-arena` or your shuttle app)
+To run `pr-gatekeeper` inside another project directory:
+```bash
+# 1. Navigate to target project
+cd /path/to/your-target-repo
+
+# 2. Activate its virtual environment
+source venv/bin/activate
+
+# 3. Install pr-gatekeeper in editable mode
+pip install -e /path/to/agentic-pr-gatekeeper
+
+# 4. Run the review against main
+pr-gatekeeper review --target main
 ```
 
 ---
