@@ -100,14 +100,14 @@ Most AI code reviewers pass raw, truncated `git diff` text directly to an LLM. W
 | **Enterprise Governance** | Generic LLM prompt heuristics. | **`get_arch_guidelines()`**: Injects repo's real [`ARCHITECTURE.md`](file:///Users/hacaca/Projects/personal/public-repo/agentic-pr-gatekeeper/ARCHITECTURE.md) rules into review prompt. |
 | **Blast Radius Calculation** | Guessed arbitrarily by LLM (hallucination-prone). | **Deterministic Engine**: Mathematical line diff count + critical infra pattern matching. |
 
-### 🚌 Real-World Example: Shuttle Travel & Seat Booking System
-In high-concurrency systems (such as a **Shuttle Travel Booking System**), subtle bugs can cause critical operational failures:
-* **The Problem:** A developer modifies `book_seat()` in `booking.py` but forgets row-level locking (`SELECT FOR UPDATE`), creating a double-booking race condition. They also forget to add a unit test in `tests/test_booking.py`.
-* **Traditional Raw Diff Reviewer:** Sees valid Python syntax $\rightarrow$ **False Approval 🟢** (Bypasses CI and causes production double-booking incidents).
+### 💡 Real-World Scenario: Concurrency & Transaction Safety
+In high-concurrency systems (such as financial ledgers, inventory reservation, or payment processing), subtle bugs can cause catastrophic data corruption:
+* **The Problem:** A developer modifies `deduct_balance()` in `wallet.py` but forgets row-level locking (`SELECT FOR UPDATE`), creating race conditions and balance discrepancies. They also omit regression unit tests.
+* **Traditional Raw Diff Reviewer:** Sees valid Python syntax $\rightarrow$ **False Approval 🟢** (Bypasses CI and introduces silent race conditions into production).
 * **Agentic MCP Gatekeeper:**
-  1. AST extraction isolates `book_seat()` at line 45.
-  2. Test discovery notes: `test_booking.py` missing accompanying regression tests.
-  3. Architecture guidelines inject rule: *"Seat allocation must use row-level locking (`SELECT FOR UPDATE`)"*.
+  1. AST extraction isolates `deduct_balance()` at line 45.
+  2. Test discovery notes: `test_wallet.py` missing accompanying regression tests.
+  3. Architecture guidelines inject rule: *"All balance updates and monetary deductions must use row-level locking (`SELECT FOR UPDATE`)"*.
   4. **Verdict: 🔴 MERGE BLOCKED** with actionable architectural findings!
 
 ---
