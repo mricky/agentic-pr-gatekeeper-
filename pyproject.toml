@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-pr-gatekeeper"
+version = "1.0.0"
+description = "AI-Powered Autonomous Pull Request Review & Quality Gatekeeper via MCP"
+authors = [{ name = "Mochamad Ricky Susanto" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.5.0",
+    "rich>=13.7.0",
+    "typer>=0.9.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+
+[project.scripts]
+pr-gatekeeper = "pr_gatekeeper.cli:app"
