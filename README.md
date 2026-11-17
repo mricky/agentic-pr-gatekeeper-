@@ -205,7 +205,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install agentic-pr-gatekeeper
+      - run: pip install git+https://github.com/mricky/agentic-pr-gatekeeper-.git
       - name: Run Review Gatekeeper
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
