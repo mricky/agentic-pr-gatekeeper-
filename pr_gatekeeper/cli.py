@@ -11,10 +11,17 @@ from pr_gatekeeper.reporter import (
     post_github_status_and_comment
 )
 
+SUPPORTED_EXTENSIONS = [
+    "*.py", "*.ts", "*.tsx", "*.js", "*.jsx",
+    "*.go", "*.rs", "*.java", "*.php", "*.rb",
+    "*.cs", "*.cpp", "*.c", "*.sql", "*.html",
+    "*.yaml", "*.yml"
+]
+
 def get_git_diff_and_stats(target_branch: str = "main") -> Tuple[str, str, List[str]]:
-    """Extracts git diff, numstat, and changed file paths."""
+    """Extracts git diff, numstat, and changed file paths across polyglot languages."""
     cmd_stat = ["git", "diff", f"origin/{target_branch}...HEAD", "--numstat"]
-    cmd_diff = ["git", "diff", f"origin/{target_branch}...HEAD", "--", "*.py", "*.js", "*.ts", "*.tsx", "*.sql", "*.html"]
+    cmd_diff = ["git", "diff", f"origin/{target_branch}...HEAD", "--"] + SUPPORTED_EXTENSIONS
 
     try:
         numstat = subprocess.check_output(cmd_stat).decode("utf-8", errors="ignore")
@@ -22,7 +29,7 @@ def get_git_diff_and_stats(target_branch: str = "main") -> Tuple[str, str, List[
     except Exception:
         try:
             cmd_stat = ["git", "diff", "HEAD~1...HEAD", "--numstat"]
-            cmd_diff = ["git", "diff", "HEAD~1...HEAD", "--", "*.py", "*.js", "*.ts", "*.tsx", "*.sql"]
+            cmd_diff = ["git", "diff", "HEAD~1...HEAD", "--"] + SUPPORTED_EXTENSIONS
             numstat = subprocess.check_output(cmd_stat).decode("utf-8", errors="ignore")
             diff = subprocess.check_output(cmd_diff).decode("utf-8", errors="ignore")
         except Exception:
