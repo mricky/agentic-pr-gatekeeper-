@@ -40,3 +40,4 @@ def test_models_risk_score_bounds():
             verdict=Verdict.REJECTED_BLOCKED,
             summary="Invalid score test"
         )
+

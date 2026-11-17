@@ -113,3 +113,4 @@ class ContextMCPServer:
             "related_tests": related_tests,
             "architecture_guidelines": self.get_arch_guidelines()
         }
+

@@ -12,3 +12,4 @@
 ## 3. Testing & Reliability
 - Minimum 80% branch coverage threshold required for production merges.
 - All non-trivial bug fixes must be accompanied by regression unit tests.
+

@@ -42,3 +42,4 @@ jobs:
           COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           pr-gatekeeper review --target ${{ github.base_ref || 'main' }} --ci
+

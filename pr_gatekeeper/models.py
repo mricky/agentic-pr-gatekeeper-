@@ -52,3 +52,4 @@ class GatekeeperReport(BaseModel):
     findings: List[ReviewFinding] = Field(default_factory=list)
     deterministic_metrics: Optional[DeterministicMetrics] = None
     mcp_context_used: Optional[Dict[str, Any]] = None
+

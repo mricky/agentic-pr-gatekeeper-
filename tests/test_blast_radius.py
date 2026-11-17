@@ -33,3 +33,4 @@ def test_calculate_deterministic_metrics_system_wide():
 
     assert metrics.touches_critical_infrastructure is True
     assert metrics.deterministic_blast_radius == BlastRadiusLevel.SYSTEM_WIDE
+

@@ -24,3 +24,4 @@ dev = [
 
 [project.scripts]
 pr-gatekeeper = "pr_gatekeeper.cli:app"
+

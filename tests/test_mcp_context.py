@@ -30,3 +30,4 @@ def test_mcp_arch_guidelines_fallback():
         mcp = ContextMCPServer(root_dir=tmpdir)
         guidelines = mcp.get_arch_guidelines()
         assert "Enterprise Engineering Architecture Guidelines" in guidelines
+
